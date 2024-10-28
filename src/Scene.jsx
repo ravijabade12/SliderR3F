@@ -1,8 +1,9 @@
 import React, { Suspense, useState, useEffect } from "react";
-import { Canvas, useLoader } from "@react-three/fiber";
+import { Canvas, useLoader, useFrame } from "@react-three/fiber";
 import { OrbitControls, Environment } from "@react-three/drei";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRef } from "react";
 
 const models = [
   {
@@ -35,6 +36,7 @@ const models = [
 // Rest of the components remain the same...
 function Model({ modelPath, onLoad }) {
   const gltf = useLoader(GLTFLoader, modelPath);
+  const modelRef = useRef();
 
   useEffect(() => {
     if (gltf) {
@@ -42,8 +44,15 @@ function Model({ modelPath, onLoad }) {
     }
   }, [gltf, onLoad]);
 
+  useFrame((state, delta) => {
+    if (modelRef.current) {
+      modelRef.current.rotation.y += delta * 0.5; // Adjust rotation speed by changing the multiplier
+    }
+  });
+
   return (
     <primitive
+      ref={modelRef}
       object={gltf.scene}
       position={
         modelPath.includes("vr.glb") || modelPath.includes("wooden_box.glb")
