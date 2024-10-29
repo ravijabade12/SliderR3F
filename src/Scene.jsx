@@ -33,7 +33,6 @@ const models = [
   },
 ];
 
-// Rest of the components remain the same...
 function Model({ modelPath, onLoad }) {
   const gltf = useLoader(GLTFLoader, modelPath);
   const modelRef = useRef();
@@ -46,7 +45,7 @@ function Model({ modelPath, onLoad }) {
 
   useFrame((state, delta) => {
     if (modelRef.current) {
-      modelRef.current.rotation.y += delta * 0.5; // Adjust rotation speed by changing the multiplier
+      modelRef.current.rotation.y += delta * 0.5;
     }
   });
 
@@ -60,9 +59,7 @@ function Model({ modelPath, onLoad }) {
           : [0, 0, 0]
       }
       rotation={
-        modelPath.includes("laptop.glb")
-          ? [0, -Math.PI / 4, 0] // Rotate 45 degrees around Y axis for laptop
-          : [0, 0, 0]
+        modelPath.includes("laptop.glb") ? [0, -Math.PI / 4, 0] : [0, 0, 0]
       }
     />
   );
@@ -92,10 +89,10 @@ function NavigationButton({ direction, onClick, disabled }) {
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`bg-white/10 hover:bg-white/20 p-4 rounded-full backdrop-blur-sm transition-all 
+      className={`bg-white/10 hover:bg-white/20 p-2 md:p-4 rounded-full backdrop-blur-sm transition-all 
         ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
     >
-      <Icon className="w-8 h-8 text-white" />
+      <Icon className="w-6 h-6 md:w-8 md:h-8 text-white" />
     </button>
   );
 }
@@ -136,25 +133,25 @@ function Scene() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 py-12 px-4">
+    <div className="min-h-screen bg-gray-900 py-6 md:py-12 px-2 md:px-4">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-white text-3xl font-bold text-center mb-8">
+        <h2 className="text-white text-2xl md:text-3xl font-bold text-center mb-4 md:mb-8">
           3D Model Viewer
         </h2>
 
-        <div className="bg-gray-800 rounded-2xl p-8">
-          <h3 className="text-white text-2xl font-bold text-center mb-6">
+        <div className="bg-gray-800 rounded-xl md:rounded-2xl p-4 md:p-8">
+          <h3 className="text-white text-xl md:text-2xl font-bold text-center mb-4 md:mb-6">
             {models[currentModelIndex].name}
           </h3>
 
-          <div className="relative flex items-center justify-center gap-8">
+          <div className="relative flex items-center justify-center gap-2 md:gap-8">
             <NavigationButton
               direction="left"
               onClick={previousModel}
               disabled={isLoading}
             />
 
-            <div className="relative w-[600px] h-[400px] bg-gray-700 rounded-xl overflow-hidden">
+            <div className="relative w-full h-[300px] md:w-[600px] md:h-[400px] bg-gray-700 rounded-xl overflow-hidden">
               {isLoading && <LoadingSpinner />}
               <Canvas
                 key={key}
@@ -162,7 +159,7 @@ function Scene() {
                   fov: 50,
                   near: 0.1,
                   far: 1000,
-                  position: models[currentModelIndex].cameraPosition, // Use model-specific camera position
+                  position: models[currentModelIndex].cameraPosition,
                 }}
               >
                 <Suspense fallback={null}>
@@ -184,13 +181,13 @@ function Scene() {
             />
           </div>
 
-          <div className="flex justify-center gap-3 mt-8">
+          <div className="flex justify-center gap-2 md:gap-3 mt-4 md:mt-8">
             {models.map((_, index) => (
               <button
                 key={index}
                 onClick={() => selectModel(index)}
                 disabled={isLoading}
-                className={`w-4 h-4 rounded-full transition-all ${
+                className={`w-3 h-3 md:w-4 md:h-4 rounded-full transition-all ${
                   index === currentModelIndex
                     ? "bg-white scale-110"
                     : "bg-white/30 hover:bg-white/50"
@@ -200,13 +197,13 @@ function Scene() {
             ))}
           </div>
 
-          <div className="mt-8 grid grid-cols-5 gap-4">
+          <div className="mt-4 md:mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 md:gap-4">
             {models.map((model, index) => (
               <button
                 key={index}
                 onClick={() => selectModel(index)}
                 disabled={isLoading}
-                className={`p-4 rounded-lg transition-all ${
+                className={`p-2 md:p-4 rounded-lg transition-all ${
                   index === currentModelIndex
                     ? "bg-white/20 ring-2 ring-white"
                     : "bg-white/5 hover:bg-white/10"
@@ -214,7 +211,7 @@ function Scene() {
                   isLoading ? "cursor-not-allowed opacity-50" : "cursor-pointer"
                 }`}
               >
-                <p className="text-white text-center font-medium">
+                <p className="text-white text-sm md:text-base text-center font-medium">
                   {model.name}
                 </p>
               </button>
